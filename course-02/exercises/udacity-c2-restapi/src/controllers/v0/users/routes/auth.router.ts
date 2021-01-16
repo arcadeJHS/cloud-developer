@@ -7,22 +7,29 @@ import * as jwt from 'jsonwebtoken';
 import { NextFunction } from 'connect';
 
 import * as EmailValidator from 'email-validator';
+import { config } from '../../../../config/config';
 
 const router: Router = Router();
 
 async function generatePassword(plainTextPassword: string): Promise<string> {
-    //@TODO Use Bcrypt to Generated Salted Hashed Passwords
-    return '';
+    // Use Bcrypt to Generated Salted Hashed Passwords
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(plainTextPassword, salt);
+    
+    return hash;
 }
 
 async function comparePasswords(plainTextPassword: string, hash: string): Promise<boolean> {
-    //@TODO Use Bcrypt to Compare your password to your Salted Hashed Password
+    // Use Bcrypt to Compare your password to your Salted Hashed Password
+    const compare = await bcrypt.compare(plainTextPassword, hash);
     return true;
 }
 
 function generateJWT(user: User): string {
-    //@TODO Use jwt to create a new JWT Payload containing
-    return '';
+    // Use jwt to create a new JWT Payload containing
+    const token = jwt.sign(user, config.jwt.jwt_secret);
+    return token;
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -86,9 +93,11 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 //register a new user
+// /api/v0/users/auth
 router.post('/', async (req: Request, res: Response) => {
     const email = req.body.email;
     const plainTextPassword = req.body.password;
+
     // check email is valid
     if (!email || !EmailValidator.validate(email)) {
         return res.status(400).send({ auth: false, message: 'Email is required or malformed' });
@@ -107,6 +116,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const password_hash = await generatePassword(plainTextPassword);
+    console.log(password_hash);
 
     const newUser = await new User({
         email: email,
