@@ -28,7 +28,8 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 
 function generateJWT(user: User): string {
     // Use jwt to create a new JWT Payload containing
-    const token = jwt.sign(user, config.jwt.secret);
+    const userPOJO = user.dataValues;
+    const token = jwt.sign(userPOJO, config.jwt.secret);
     return token;
 }
 
@@ -74,13 +75,14 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 
     const user = await User.findByPk(email);
+
     // check that user exists
     if (!user) {
         return res.status(401).send({ auth: false, message: 'Unauthorized' });
     }
 
     // check that the password matches
-    const authValid = await comparePasswords(password, user.password_hash)
+    const authValid = await comparePasswords(password, user.dataValues.password_hash);
 
     if (!authValid) {
         return res.status(401).send({ auth: false, message: 'Unauthorized' });
