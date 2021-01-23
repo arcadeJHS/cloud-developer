@@ -35,6 +35,6 @@ export async function deleteLocalFiles(files: Array<string>) {
 
 // isValidImageURL
 // simple image url check
-export function isValidImageURL(url: string) {
+export function isValidImageURL(url: string): boolean {
     return !!url.match(/^(http|https).*\.(jpg|jpeg|gif|png|tiff|bmp)$/);
 };

@@ -4,12 +4,6 @@ import { filterImageFromURL, deleteLocalFiles, isValidImageURL } from '../../../
 const router: Router = Router();
 
 /**
- * ===> Ristrutturare meglio il codice
- * aggiungere più typescript e tipizzazione
- * aggiungere un file di configurazioni d'ambiente? SOLO SE SERVE (forse per accedere a S3? Ma serve? forse le imamigni sono già pubbliche)
- */
-
-/**
  * GET /filteredimage?image_url={{URL}}
  * 
  * QUERY PARAMETERS
@@ -20,7 +14,7 @@ const router: Router = Router();
  */
 router.get('/',
     // requireAuth,
-    async (req, res) => {
+    async (req: Request, res: Response) => {
         try {
             let { image_url } = req.query;
 
@@ -35,7 +29,7 @@ router.get('/',
             }
 
             // Filter and image to local path
-            const filteredImageLocalPath = await filterImageFromURL(image_url);
+            const filteredImageLocalPath: string = await filterImageFromURL(image_url);
 
             // Send the resulting file in the response
             await res.sendFile(filteredImageLocalPath, null, async (error) => {
