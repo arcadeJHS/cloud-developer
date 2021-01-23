@@ -27,7 +27,19 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
+  // the endpoint accepts:
+  // locally:
+  // http://localhost:{{PORT}}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
+  // developed on AWS Beanstalk:
+  // http://{{EB_URL}}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
   /**************************************************************************** */
+
+  /**
+   * ===> Ristrutturare meglio il codice
+   * come da server API: spostando da qui gli endpoint e usando i controllers
+   * aggiungere più typescript e tipizzazione
+   * aggiungere un file di configurazioni d'ambiente?
+   */
 
   //! END @TODO1
   
